@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { mongooseConnect } = require('./lib/mongooseconnect');
+const { mongooseConnect } = require('./lib/mongooseConnect');
 const productsRoute = require('./routes/products');
 const slideshowRoutes = require('./routes/slideshow'); 
 const cors = require('cors');
