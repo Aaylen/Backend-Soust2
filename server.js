@@ -4,13 +4,20 @@ const { mongooseConnect } = require('./lib/mongooseConnect');
 const productsRoute = require('./routes/products');
 const slideshowRoutes = require('./routes/slideshow'); 
 const cors = require('cors');
+const path = require('path');
+const app = express();
+// Assuming __dirname is the directory of the current module
+const buildPath = path.join(__dirname, '../Frontend-Soust/build');
+
+app.use(express.static(buildPath));
+
 
 // Import Category and Subcategory models to ensure they are registered
 require('./models/Category'); // Adjust the path as necessary
 require('./models/Subcategory'); // Adjust the path as necessary
 require('./models/Slideshow')
 
-const app = express();
+
 
 // Connect to MongoDB using mongooseConnect
 mongooseConnect()
@@ -24,7 +31,15 @@ app.use(express.json()); // For parsing application/json
 app.use('/api', productsRoute);
 app.use('/api', slideshowRoutes);
 
-// ...other configurations and middleware
+app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, '../Frontend-Soust/build/index.html'), function(err) {
+        if (err) {
+            console.error(err);
+            res.status(500).send(err);
+            return;
+        }
+    });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
